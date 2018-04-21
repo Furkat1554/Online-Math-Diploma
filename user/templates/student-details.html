@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Profile</title>
+  	{% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 ">
+          <div class="card">
+            <a href="{% url 'home' %}">main</a><br>
+
+          </div>
+        </div>
+        <div class="col-sm">
+          {% if student %}
+            <div class="card">
+              <div class="card-head">
+                Student info
+              </div>
+              <div class="card-body">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>First name</td>
+                        <td>{{ student.first_name }}</td>
+                      </tr>
+                      <tr>
+                        <td>Last name</td>
+                        <td>{{student.last_name}}</td>
+                      </tr>
+                      <tr>
+                        <td>Group</td>
+                        <td>{{student.profile.student_group}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+
+            {% if enrolled_subject_list %}
+            <div class="card">
+              <div class="card-head">
+                Enrolled subjects
+              </div>
+              <div class="card-body">
+                {% for subject in enrolled_subject_list %}
+                  <table class="table table-bordered ">
+                    <tbody>
+                      <tr>
+                        <td><a href="{% url 'subject:show_subject_details' subject.id %}">{{ subject.title }}</a></td>
+                        <td><a href="#">unenroll</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            {% if not enrolled_subject_list %}
+                <h3>Hasn't been enrolled</h3>
+            {% endif %}
+
+          {% endif %}
+
+
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Subject List</title>
+  	{% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  </head>
+  <body>
+    <div class="container">
+<div class="row">
+      {%  if not user.is_authenticated %}
+        <div class="col-sm ">
+          <div class="card">
+            <a href="{% url 'users:sign_up' %}">Sign Up</a><br>
+            <a href="{% url 'users:sign_in' %}">Sign In</a><br>
+
+          </div>
+        </div>
+      {% endif %}
+      <div class="col-sm">
+        <div class="card">
+
+          {%  if user.is_authenticated %}
+            {% if subject_list %}
+              <ul>
+                {% for subject in subject_list %}
+                  <li><a href="{% url 'subject:show_subject_details' subject.id %}" class="btn btn-link">{{ subject.title }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+      </div>
+
+    </div>
+  </body>
+</html>

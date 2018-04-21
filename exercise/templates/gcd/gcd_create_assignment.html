@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>GCD Solve</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="../../static/css/bootstrap4.min.css">
+    <link rel="stylesheet" href="../../static/css/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="card">
+          Give assignments
+
+          <form class="" action="{% url 'gcd_give_assignment' %}" method="post">
+            {% csrf_token %}
+            <label for="amount">Exercise amount</label>
+            <input type="number" id="amount" name="smount" value="" required>
+<br>
+            <label for="group">Select group</label>
+            <select multiple required>
+              <option value="com14">com14</option>
+              <option value="com15">com15</option>
+              <option value="com16">com16</option>
+              <option value="com17">com17</option>
+              <option value="mat16">mat16</option>
+              <option value="mat17">mat17</option>
+            </select>
+
+            </select>
+            <br>
+            <input type="submit" name="submit" value="submit">
+          </form>
+
+          <div class="card" id='response'>
+            <div class="server-response">
+              <h3 id=result></h3>
+            </div>
+          </div>
+        </div>
+    </div>
+    {% block javascript %}
+    <script type="text/javascript" src='../../static/js/jquery-3.2.1.js'></script>
+    {% endblock %}
+  </body>
+</html>

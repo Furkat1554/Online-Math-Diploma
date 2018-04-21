@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>GCD Solve</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="../../static/css/bootstrap4.min.css">
+    <link rel="stylesheet" href="../../static/css/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="card">
+          Find greatest common divisor
+          <div id="right_pod">
+            {% for i in variables %}
+                <span class="variable">{{ i }}</span>
+            {% endfor %}
+          </div><br>
+          <form class="" action="" method="post">
+            {% csrf_token %}
+            <label for="answe">Send answer</label>
+            <input type="number" id="answer" name="answer" value="" required> <label for="answer" id="fieldError">Please fill all fields!</label>
+            <br>
+            <button type="button" name="button" onclick="checkAnswer()">Check answer</button>
+          </form>
+
+          <div class="card" id='response'>
+            <div class="server-response">
+              <h3 id=result></h3>
+            </div>
+          </div>
+        </div>
+    </div>
+    {% block javascript %}
+    <script type="text/javascript" src='../../static/js/jquery-3.2.1.js'></script>
+    <script type="text/javascript">
+    response = document.getElementById('response');
+    result = document.getElementById('response');
+    response.style.display = 'none';
+    fieldError = document.getElementById('fieldError');
+    fieldError.style.display = 'none';
+    function checkAnswer(){
+      answer = document.getElementById('answer').value;
+      if(answer.length == 0){
+        showElement(fieldError);
+        return
+      }else{
+        hideElement(fieldError);
+      }
+      reqUrl = "{% url 'gcd_check_answer' %}";
+      variables = {{ variables }}
+      sendData = {
+        answer : answer,
+        variables : variables,
+      }
+      $.ajax({
+        async:false,
+        url: reqUrl,
+        type: "POST",
+        data: sendData,
+        success: function(res) {
+          showResponse(res);
+        },
+        failure: function(err){
+          console.log("it's not ok");
+        },
+      }); // ajax
+    } // getExerciseList()
+    function showResponse(resp){
+      response.style.display = 'block';
+      if(resp['result']){
+        result.innerText = "TRUE!!! Congrats";
+      }else{
+        result.innerText = "False!!! Oops, seems like you have misscalculations";
+      }
+    }
+
+    function toggleDisplay(el){
+      if(el.style.display != 'none'){
+      }else{
+        el.style.display = 'unset'
+      }
+      el.style.display = el.style.display != 'none' ? 'none' : 'unset'
+    }
+    function hideElement(el){
+      el.style.display = 'none';
+    }
+    function showElement(el){
+      el.style.display = 'unset';
+    }
+    </script>
+    {% endblock %}
+  </body>
+</html>

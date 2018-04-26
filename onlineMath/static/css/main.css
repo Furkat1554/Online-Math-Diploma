@@ -1,35 +1,60 @@
-.homepage{
-    background-image: url(static/img/back.png);
+            /*==================================
+                    Homa Page
+            =================================*/
+.maincontent{
+  padding-top: 5px;
+  padding-left: 25px;
+  padding-right: 25px;
+  background-color: #fff;
 }
+
+.mainbackground{
+  height: 400px;
+}
+
+/*==============================
+    Background
+==============================*/
 .header{
-    background-color: rgba(5, 5, 5, 0.8);
+  background-color:  #d9d9d9;
+  border-bottom: 1px solid #8c8b8b;
 }
-.logpage{
-    margin-left: 85%;
+
+#mainMenu li {
+  margin: 5px;
+}
+
+.menu{
     display: inline;
 }
-.logpage a{
-    margin-top: -10%;
-    font-size: 20px;
-    font-family: 'Bangers'
-}
-.logo {
-    color: #fff;
-    font-family: 'Bangers', cursive;
+
+.menu a{
+    margin-top: -4.5%;
+    font-weight: bold;
     font-size: 24px;
-    padding: 35px 15px;
-    letter-spacing: 1px;
-    margin-top: -1%;
+    font-family: 'Bangers';
 }
+
+.logo {
+    color: #3d7eff;
+    font-family: 'Bangers', cursive;
+    font-size: 30px;
+    font-weight: bold;
+    padding: 0px 25px;
+    letter-spacing: 1px;
+    margin-top: 1%;
+    margin-left: 2%;
+}
+
 .mainMenu a{
     color: #111111;
-
+    
 }
 
 .menu {
-    margin-left: 60%;
+    margin-left: 55%;
     margin-top: -8%;
-    padding: 10px 5px;
+    padding: 1px 5px;
 }
 ul{
     list-style-type: none;
@@ -55,9 +80,9 @@ ul{
 
 
 /*---------------------------------------------*/
-a {
+/*a {
     color: #fff;
-}
+}*/
 
 a:hover {
     text-decoration: none;
@@ -229,4 +254,53 @@ input {
 
 .signform{
     margin-left: 50%;
+}
+
+/*================================================================
+                All Pages
+==================================================================*/ 
+
+body{
+  background-color: #d9d9d9;
+}
+
+
+
+
+/*============================================================
+          Student page
+==============================================================*/
+
+.userinfo{
+  text-align: center;
+}
+
+.userinfo img{
+  width: 15%;
+  height: 15%;
+}
+
+.subjectname li{
+  margin: 5px;
+}
+
+
+
+/*========================================================
+          Footer
+=========================================================*/
+.footerbox{
+  position: absolute; 
+  height: 10%;
+  width: 100%;
+  background-color: rgba(11, 9, 11, 0.9);
+}
+.managed{
+  margin-left: 7%;
+  color: #ffffff;
+}
+.copyright{
+  margin-top: -3%;
+  margin-left: 80%;
+  color: #ffffff;
 }

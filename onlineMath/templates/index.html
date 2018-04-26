@@ -4,56 +4,54 @@
 	<meta charset="utf-8">
 	<title>Home</title>
 	{% load static %}
+	<link rel="icon" href="{% static 'img/favicon.png'%}" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap4.min.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
 </head>
 <body>
-<div class="homepa">
-	<div class="header">
-		<h1 class="logo">
-			<a href="#body">Online Math</a>
-		</h1>
-		<div class="logpage">
-			<a class="btn btn-info" href="{% url 'users:sign_in' %}">Log in</a>
-			<a class="btn btn-info" href="/user/sign_up/">Log up</a>
+		<div class="header">
+			<h1 class="logo">
+				<a href="#body">Online Math</a>
+			</h1>
+			<div class="menu">
+				<a class="btn btn-link" href="/admin/">Admin</a>
+				<a class="btn btn-link" href="{% url 'users:profile' %}">Account</a>
+				<a class="btn btn-link" href="/exercise/">Exercises</a>
+				<a class="btn  btn-link" href="{% url 'users:sign_in' %}">Log in</a>
+				<a class="btn  btn-link" href="/user/sign_up/">Sign up</a>
+			</div>
 		</div>
-		<div class="menu">
-			<a  class="btn btn-info" href="/admin/">Amdin</a>
-			<a  class="btn btn-info" href="{% url 'users:profile' %}">Account</a>
-			<a  class="btn btn-info" href="/exercise/">Exercises</a>
-		</div>
-	</div>
-	<div style="background-image: url(https://science.rpi.edu/sites/default/files/math_banner_0_0.jpg);">
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-	</div>
+		<div class="mainbackground" style="background-image: url({%static 'img/mathwh.png'%});">	</div>
+		
+		<div class="maincontent">
+			<div class="row">
+				<div class="col-sm-3">
+					<div id="mainMenu" data-overview="Overview">
+						<nav class="animated clearfix mp-menu mp-overlap" style>
+							<div class="animated mp-level" data-level="1" style="display: block">
+								<a href="{% url 'subject:show_subject_list_view' %}" class="btn btn-primary">All subjects</a>
+								{% if subject_list %}
+									<ul>
+										{% for subject in subject_list %}
+										<li><a href="{% url 'subject:show_subject_details' subject.id %}"
+											class="btn btn-primary">{{ subject.title }}</a></li>
+										{% endfor %}
 
-	<div class="row">
-		<p class="col-md-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-		<img src="https://thsm-makelleyandcompa.netdna-ssl.com/wp-content/uploads/math-2.jpg" class="col-md-4">
-		<div class="col-md-4">
-		<div id="mainMenu" data-overview="Overview">
-		<nav class="animated clearfix mp-menu mp-overlap" style>
-		<div class="animated mp-level" data-level="1" style="display: block">
-			<a href="{% url 'subject:show_subject_list_view' %}" class="btn btn-dark">Subjects</a>
-			{% if subject_list %}
-				<ul>
-					{% for subject in subject_list %}
-					<li><a href="{% url 'subject:show_subject_details' subject.id %}"
-						class="btn btn-link">{{ subject.title }}</a> </li>
-					{% endfor %}
-				</ul>
-			{% endif %}
-
-		</div>
-		</div>
-		</nav>
-		</div>
+									</ul>
+								{% endif %}
+							</div>
+						</nav>
+					</div>
+				</div>
+					<p class="col-sm-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+					<img src="{%static 'img/image1.png'%}" class="col-sm-5">
+				</div>
+			</div>
+<footer>
+	<div class="footerbox">
+		<br><p class="managed">Project managed by Furkat Karaev</p>
+		<p class="copyright">©Online Math 2018</p>
 	</div>
-</div>
+</footer>
 </body>
 </html>

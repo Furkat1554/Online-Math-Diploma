@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'exercise.apps.ExerciseConfig',
     'user.apps.UserConfig',
     'subject.apps.SubjectConfig',
+    'calculus1.apps.Calculus1Config',
     'onlineMath',
 ]
 

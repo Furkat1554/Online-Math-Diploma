@@ -8,7 +8,7 @@
   	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
   </head>
   <body>
-    
+
     <div class="header">
       <h1 class="logo">
         <a href="{% url 'home' %}">Online Math</a>
@@ -27,7 +27,7 @@
         {%  if not user.is_authenticated %}
           <div class="col-sm ">
             <div class="card">
-              <a href="{% url 'users:sign_up' %}">Sign Up</a><br>
+              <a href="{% url 'users:sign_up' %}">Sign Up</a>
               <a href="{% url 'users:sign_in' %}">Sign In</a><br>
             </div>
           </div>
@@ -35,14 +35,12 @@
 
         <div class="col-sm">
           <div class="card">
-            {%  if user.is_authenticated %}
-              {% if subject_list %}
-                <ul class="subjectname">
-                  {% for subject in subject_list %}
-                    <li><a href="{% url 'subject:show_subject_details' subject.id %}" class="btn btn-success">{{ subject.title }}</a></li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
+            {% if subject_list %}
+              <ul class="subjectname">
+                {% for subject in subject_list %}
+                  <li><a href="{% url 'subject:show_subject_details' subject.subject_code %}" class="btn btn-success">{{ subject.title }}</a></li>
+                {% endfor %}
+              </ul>
             {% endif %}
           </div>
         </div>

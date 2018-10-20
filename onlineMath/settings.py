@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'subject.apps.SubjectConfig',
     'calculus1.apps.Calculus1Config',
     'onlineMath',
+    'simpleMath',
 ]
 
 MIDDLEWARE_CLASSES = [

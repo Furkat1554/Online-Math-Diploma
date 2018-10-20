@@ -6,6 +6,8 @@
   	{% load staticfiles %}
     <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <script src="{% static 'js/jquery-3.2.1.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
   </head>
   <body>
     <div class="header">
@@ -37,49 +39,25 @@
       <div class="col-sm">
         <div class="card">
 
-          {%  if user.is_authenticated %}
-            {% if subject %}
-              <h2>Subject name: {{ subject.title }}</h2>
-              {% if is_current_user_enrolled %}
+          {% if subject %}
+            <h2>Subject name: {{ subject.title }}</h2>
 
-              <form class="" action="/subject/unenroll_user/" method="post">
-                {% csrf_token %}
-                  <input type="text" name="subject_id" value="{{subject.id}}" hidden>
-                  <input type="submit" name="submit" value="Unenroll" class="btn btn-warning">
-              </form>
-                <h2>Enroll students: </h2>
-              {% endif %}
-              {% if not is_current_user_enrolled %}
-                <h2>Enroll</h2>
-                <form class="" action="/subject/enroll_user/" method="post">
-                  {% csrf_token %}
-                    <input type="text" name="subject_id" value="{{subject.id}}" hidden>
-                    <input type="text" name="enroll_key" value="">
-                    <input type="submit" name="submit" value="Enroll" class="btn btn-warning">
-                </form>
-              {% endif %}
-            {% endif %}
-
-            {% if not subject %}
-              <h2>no subject {{ subject.title }}</h2>
-            {% endif %}
-
-            {% if enrolled_students %}
-              <ul>
-                {% for student in enrolled_students %}
-                  <li><a class="btn btn-link" href="{% url 'users:student_details_view' student.id %}">{{ student.first_name }} {{ student.last_name }}</a></li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-            {% if not enrolled_students %}
-              <h2>No enrolled students</h2>
-            {% endif %}
+            <ul class="topic-list"></ul>
 
           {% endif %}
+
+          {% if not subject %}
+            <h2>no subject {{ subject.title }}</h2>
+          {% endif %}
+
         </div>
       </div>
       </div>
 
     </div>
+
+    <script>
+      displayTopicList();
+    </script>
   </body>
 </html>

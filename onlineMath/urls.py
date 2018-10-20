@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^user/', include('user.urls', namespace='users')),
     url(r'^exercise/',include('exercise.urls')),
     url(r'^subject/',include('subject.urls',namespace='subject'), ),
-    url(r'^calculus1/',include('calculus1.urls',namespace='calculus1'), ),
+    url(r'^calculus_1/',include('calculus1.urls',namespace='calculus1'), ),
+    url(r'^simple_math/', include('simpleMath.urls', namespace='simple_math'), ),
 ]  +  static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

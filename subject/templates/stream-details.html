@@ -1,85 +1,95 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Subject details</title>
-  	{% load staticfiles %}
-    <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
-  </head>
-  <body>
-    <div class="header">
-      <h1 class="logo">
-        <a href="{% url 'home' %}">Online Math</a>
-      </h1>
-      <div class="logpage">
-        <a class="btn btn-info" href="{% url 'users:sign_in' %}">Log in</a>
-        <a class="btn btn-info" href="/user/sign_up/">Sign up</a>
-      </div>
-      <div class="menu">
-        <a  class="btn btn-info" href="/admin/">Admin</a>
-        <a  class="btn btn-info" href="{% url 'users:profile' %}">Account</a>
-        <a  class="btn btn-info" href="/exercise/">Exercises</a>
-      </div>
-    </div>
+<head>
+  <meta charset="utf-8">
+  <title>Subject details</title>
+  {% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+</head>
+<body>
+<div class="header">
+  <h1 class="logo">
+    <a href="{% url 'home' %}">Online Math</a>
+  </h1>
+  <div class="logpage">
+    <a class="btn btn-info" href="{% url 'users:sign_in' %}">Log in</a>
+    <a class="btn btn-info" href="/user/sign_up/">Sign up</a>
+  </div>
+  <div class="menu">
+    <a class="btn btn-info" href="/admin/">Admin</a>
+    <a class="btn btn-info" href="{% url 'users:profile' %}">Account</a>
+    <a class="btn btn-info" href="/exercise/">Exercises</a>
+  </div>
+</div>
 
-    <div class="container">
-<div class="row">
-      {%  if not user.is_authenticated %}
-        <div class="col-sm ">
-          <div class="card">
-            <a href="{% url 'users:sign_up' %}">Sign Up</a><br>
-            <a href="{% url 'users:sign_in' %}">Sign In</a><br>
-
-          </div>
-        </div>
-      {% endif %}
-      <div class="col-sm">
+<div class="container">
+  <div class="row">
+    {% if not user.is_authenticated %}
+      <div class="col-sm ">
         <div class="card">
+          <a href="{% url 'users:sign_up' %}">Sign Up</a><br>
+          <a href="{% url 'users:sign_in' %}">Sign In</a><br>
 
-          {%  if user.is_authenticated %}
-            {% if stream %}
-              <h2>Subject name: {{ stream.title }}</h2>
-              {% if is_current_user_enrolled %}
-
-              <form class="" action="/subject/unenroll_user/" method="post">
-                {% csrf_token %}
-                  <input type="text" name="subject_id" value="{{subject.id}}" hidden>
-                  <input type="submit" name="submit" value="Unenroll" class="btn btn-warning">
-              </form>
-                <h2>Enroll students: </h2>
-              {% endif %}
-              {% if not is_current_user_enrolled %}
-                <h2>Enroll</h2>
-                <form class="" action="/subject/enroll_user/" method="post">
-                  {% csrf_token %}
-                    <input type="text" name="subject_id" value="{{subject.id}}" hidden>
-                    <input type="text" name="enroll_key" value="">
-                    <input type="submit" name="submit" value="Enroll" class="btn btn-warning">
-                </form>
-              {% endif %}
-            {% endif %}
-
-            {% if not stream %}
-              <h2>no stream {{ stream.title }}</h2>
-            {% endif %}
-
-            {% if enrolled_students %}
-              <ul>
-                {% for student in enrolled_students %}
-                  <li><a class="btn btn-link" href="{% url 'users:student_details_view' student.id %}">{{ student.first_name }} {{ student.last_name }}</a></li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-            {% if not enrolled_students %}
-              <h2>No enrolled students</h2>
-            {% endif %}
-
-          {% endif %}
         </div>
       </div>
-      </div>
+    {% endif %}
+    <div class="col-sm">
+      <div class="card">
 
+        {% if user.is_authenticated %}
+          <div id="not-enrolled-section" hidden>
+            <p style="font-size: 20px; font-family: 'Arial'">Furkat Karaev</p>
+            <input style="
+              border: 2px solid #007bff;
+              border-radius: 4px;
+              padding-left: 20px;
+              padding-top: 3px;
+              padding-bottom: 5px;
+              " type="text" placeholder="Enter the key"
+                   name="Enroll key" id="enroll-key">
+            <button type="button" class="btn btn-primary" id="enroll-btn">Enroll</button>
+          </div>
+          <div id="enrolled-section" hidden>
+            <h3>You're enrolled</h3>
+
+            <div id="assignments"></div>
+
+            <button type="button" class="btn btn-primary" id="un-enroll-btn">Unenroll</button>
+          </div>
+        {% endif %}
+      </div>
     </div>
-  </body>
+  </div>
+
+</div>
+{% csrf_token %}
+<script src="{% static 'js/jquery-3.2.1.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/streams.js' %}"></script>
+<script>
+  {#details = getStreamDetails();#}
+  var isCurrentUserEnrolled = isUserEnrolled();
+  displayEnrollAccess(isCurrentUserEnrolled.isUserEnrolled);
+
+  var assignments = getStreamAssignmentsDetails();
+
+  $('#enroll-btn').click(function () {
+    var key = $('#enroll-key').val();
+    if (key.trim().length == 0) {
+      alert('Enter key');
+    }
+    enrollUser(key);
+  });
+
+  $('#un-enroll-btn').click(function () {
+    unEnrollUser();
+  });
+
+  $('btn').click(function () {
+    window.load();
+  })
+
+</script>
+</body>
 </html>

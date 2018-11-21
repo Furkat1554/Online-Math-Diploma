@@ -2,20 +2,13 @@
 from __future__ import unicode_literals
 
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
 from .models import *
 from django.http import JsonResponse
-
+from onlineMath.models import *
 import random
 
 
-# Create your views here.
-def sample(req):
-    return render(req, 'sample.html')
-
-
 def generate_example(req, topic_name):
-    topic_name = topic_name.upper()
     result = ExpressionRequestResult()
     if TopicList.is_addition(topic_name):
         result.expression = generate_simple_exercise('+')
@@ -53,14 +46,8 @@ def solve_expression(req):
 
 
 def generate_simple_exercise(operation):
-    num1 = 0
-    num2 = 0
-    if operation == '/' or operation == '*':
-        num1 = random.randint(1, 100)
-        num2 = random.randint(1, 10)
-    else:
-        num1 = random.randint(-100, 100)
-        num2 = random.randint(-100, 10)
+    num1 = random.randint(1, 100)
+    num2 = random.randint(1, 100)
 
     exercise = str(num1) + " " + operation + " " + str(num2) + " = "
     return exercise

@@ -36,22 +36,19 @@
         <div class="col-sm">
           <div class="card">
             {%  if user.is_authenticated %}
-              {% if stream_list %}
-                <ul class="subjectname">
-                  {% for stream in stream_list %}
-                    <li><a href="{% url 'subject:show_subject_details' subject.id %}" class="btn btn-success">{{ stream.title }}</a></li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-
-              {% if not stream_list %}
-                no streams
-              {% endif %}
+              <div class="col-sm-4">
+                <h5 class="mb-3">Streams list</h5>
+                <ul id="stream-list"></ul>
+              </div>
             {% endif %}
           </div>
         </div>
       </div>
     </div>
-
+    <script src="{% static 'js/jquery-3.2.1.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+      displayStreamList()
+    </script>
   </body>
 </html>

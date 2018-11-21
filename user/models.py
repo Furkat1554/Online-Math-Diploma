@@ -3,14 +3,17 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
+
 class ProfileGroup(models.Model):
     title = models.CharField(max_length=50, unique=True)
+
     def __str__(self):
         return self.title
 
+
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,null=True,blank=True)
-    student_group = models.ForeignKey(ProfileGroup, on_delete=models.CASCADE,null=True,blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
+    student_group = models.ForeignKey(ProfileGroup, on_delete=models.CASCADE, null=True, blank=True)
     student_grade = models.IntegerField(default=1)
 
     def delete(self, *args, **kwargs):

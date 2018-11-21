@@ -43,12 +43,24 @@
 						</nav>
 					</div>
 				</div>
-					<p class="col-sm-4">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.</p>
-					<img src="{%static 'img/image1.png'%}" class="col-sm-5">
+
+
+					<img src="{%static 'img/image1.png'%}" class="col-sm-4">
+
+          <div class="col-sm-4">
+            <a href="{% url 'subject:show_streams_list_view' %}" class="btn btn-primary mb-1">All streams</a>
+
+            <ul id="stream-list">
+
+            </ul>
+          </div>
 				</div>
 			</div>
+    <script src="{% static 'js/jquery-3.2.1.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+      displayStreamList()
+    </script>
 <footer>
 	<div class="footerbox">
 		<br><p class="managed">Project managed by Furkat Karaev</p>

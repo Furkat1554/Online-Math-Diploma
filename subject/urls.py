@@ -45,5 +45,8 @@ urlpatterns = [
     url(r'^assignments/$',
         views.get_assignments,
         name='api_get_all_assignments'),
+    url(r'^solve-exercise/([\w|\W|\d|\D]+)/([\w|\W|\d|\D]+)$',
+        views.get_assignments,
+        name='api_get_all_assignments'),
 
 ]

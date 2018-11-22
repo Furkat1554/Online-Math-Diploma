@@ -53,7 +53,13 @@
           <div id="enrolled-section" hidden>
             <h3>You're enrolled</h3>
 
-            <div id="assignments"></div>
+            <div id="assignments">
+              <h3 id="assignments-title" hidden>Assignments</h3>
+            </div>
+            <div id="exams">
+              <h3 id="exams-title" hidden>Exams</h3>
+
+            </div>
 
             <button type="button" class="btn btn-primary" id="un-enroll-btn">Unenroll</button>
           </div>
@@ -73,6 +79,9 @@
   displayEnrollAccess(isCurrentUserEnrolled.isUserEnrolled);
 
   var assignments = getStreamAssignmentsDetails();
+  var exams = getStreamExamDetails();
+  dislpayStreamAssignmentDetails(assignments);
+  dislpayStreamAssignmentDetails(exams,true);
 
   $('#enroll-btn').click(function () {
     var key = $('#enroll-key').val();
@@ -80,10 +89,12 @@
       alert('Enter key');
     }
     enrollUser(key);
+    location.reload()
   });
 
   $('#un-enroll-btn').click(function () {
     unEnrollUser();
+    location.reload()
   });
 
   $('btn').click(function () {

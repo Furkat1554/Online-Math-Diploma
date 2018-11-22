@@ -6,10 +6,6 @@ function getEnrollUserUrl() {
   return `/subject/stream/enroll_user/`;
 }
 
-function getAssignmentsUrl() {
-
-}
-
 function loadStreamDetailsPage() {
 
 }
@@ -54,7 +50,6 @@ function enrollRequest(data) {
     data['streamCode'] = getPrimaryCode();
   }
   return postAjax(getEnrollUserUrl(), data);
-
 }
 
 function enrollUser(enrollKey, userId = 0) {
@@ -75,8 +70,18 @@ function unEnrollUser(userId = 0) {
 }
 
 function getAssignments(data = {}) {
-  if(!data.hasOwnProperty('userId'))
+  if (!data.hasOwnProperty('userId')) {
     data['userId'] = 0;
+  }
+  var response = postAjax(`/subject/assignments/`, data);
+  return response['assignments'];
+}
+
+function getExams(data = {}) {
+  if (!data.hasOwnProperty('userId')) {
+    data['userId'] = 0;
+  }
+  data['isExam'] = true;
   var response = postAjax(`/subject/assignments/`, data);
   return response['assignments'];
 }
@@ -93,14 +98,68 @@ function getStreamAssignmentsDetails(streamCode, userId = 0) {
   return assignment;
 }
 
-function dislpayStreamAssignmentDetails(assignments) {
-  if (null == assignments) {
-    assignments = getStreamAssignmentsDetails();
+function getStreamExamDetails(streamCode, userId = 0) {
+  if (isEmptyVar(streamCode)) {
+    streamCode = getPrimaryCode();
   }
-  var out = `<ul id="assignment-list">`;
-  assignments.assigmnents.forEach((assignment) => {
-    out += `<li id=""></li>`;
+  var data = {
+    userId: userId,
+    streamCode: streamCode
+  };
+  var exam = getExams(data);
+  return exam;
+}
+
+
+function dislpayStreamAssignmentDetails(ass,isExam=false) {
+  if (null == ass) {
+    ass = getStreamAssignmentsDetails();
+  }
+  if (null == ass) {
+    return;
+  }
+  var out = '';
+  ass.forEach((ass) => {
+    out += `<ul class="assignment-list">`;
+    out += `<li class="font-weight-bold">${ass.assignmentName}: ${ass.solvedCount}/${ass.examplesCount}</li>`;
+    if (!ass.hasOwnProperty("assignments") || ass.assignments == null) {
+      return;
+    }
+    ass.assignments.forEach(it => {
+      var assignmentDone = getAssignmentDoneById(ass.assignmentsDone, it.assignmentId);
+      // console.log(assignmentDone.exampleAmount);
+      out += `<li id="${it.id}">${it.topicCode}: `;
+      if (assignmentDone == null) {
+        out += `(0/${it.exampleAmount}) `;
+      } else if (assignmentDone != null) {
+        out += `(${assignmentDone.exampleAmount}/${it.exampleAmount})`;
+        if (assignmentDone.isDone || assignmentDone.exampleAmount === it.exampleAmount) {
+          out += ` [OK]`;
+        }
+      }
+
+      out += `</li>`
+    });
+    out += `</ul>`
+
   });
-  out += ``;
-  out += `</ul>`
+  if(!isExam){
+    $("#assignments").html($("#assignments").html() + out);
+    $("#assignments-title").removeAttr("hidden");
+  } else {
+      $("#exams").html($("#exams").html() + out);
+      $("#exams-title").removeAttr("hidden");
+  }
+}
+
+function getAssignmentDoneById(list, id) {
+  if (list == null || list.length == 0) {
+    return null;
+  }
+  for (var obj of list) {
+    if (obj.assignmentId == id) {
+      return obj;
+    }
+  }
+  return null;
 }

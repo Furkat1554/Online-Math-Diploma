@@ -304,38 +304,25 @@ def get_assignment_details(user, assignment):
 
     assignment_topics = AssignmentTopic.objects.filter(assignment_id=assignment)
     if assignment_topics.exists():
-        assignment_dict = {
-            'assignmentId': 0,
-            'exampleAmount': 0,
-            'points': 5,
-            'topicCode': '',
-            'topicId': 0
-        }
         for ass_tp in assignment_topics:
             result['examplesCount'] += int(ass_tp.example_amount)
             if ass_tp is not None:
-                assignment_dict['assignmentId'] = ass_tp.id
-                assignment_dict['exampleAmount'] = ass_tp.example_amount
-                assignment_dict['points'] = ass_tp.points
-                assignment_dict['topicCode'] = ass_tp.topic_id.function_code
+                assignment_dict = {'assignmentId': ass_tp.id,
+                                   'exampleAmount': ass_tp.example_amount,
+                                   'points': ass_tp.points,
+                                   'subjectCode': ass_tp.assignment_id.stream_id.subject_id.subject_code,
+                                   'topicCode': ass_tp.topic_id.function_code}
                 result['assignments'].append(assignment_dict)
 
     assignment_done = AssignmentDone.objects.filter(assignment_id=assignment, user_id=user)
 
     if assignment_done.exists():
-        assignment_done_dict = {
-            'assignmentId': 0,
-            
-            'assignmentTopicCode': '',
-            'exampleAmount': 0,
-            'isDone': ''
-        }
         for done in assignment_done:
             if done is not None:
-                assignment_done_dict['assignmentId'] = done.assignment_id
-                assignment_done_dict['assignmentTopicCode'] = done.assignment_topic_id.id
-                assignment_done_dict['exampleAmount'] = done.count
-                assignment_done_dict['isDone'] = done.is_done
+                assignment_done_dict = {'assignmentId': done.assignment_id.id,
+                                        'assignmentTopicCode': done.assignment_topic_id.topic_id.function_code,
+                                        'exampleAmount': done.count,
+                                        'isDone': done.is_done}
                 result['assignmentsDone'].append(assignment_done_dict)
             result['solvedCount'] += int(done.count)
     return result

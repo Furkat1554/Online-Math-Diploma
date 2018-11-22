@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Home</title>
+	{% load static %}
+	<link rel="icon" href="{% static 'img/favicon.png'%}" type="image/x-icon">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap4.min.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+</head>
+<body>
+		<div class="header">
+			<h1 class="logo">
+				<a href="#body">Online Math</a>
+			</h1>
+			<div class="menu">
+<!-- 				<a class="btn btn-link" href="/admin/">Admin</a>
+				<a class="btn btn-link" href="{% url 'users:profile' %}">Account</a>
+				<a class="btn btn-link" href="/exercise/">Exercises</a> -->
+				<a class="btn  btn-link" href="{% url 'users:sign_in' %}">Log in</a>
+				<a class="btn  btn-link" href="/user/sign_up/">Sign up</a>
+			</div>
+		</div>
+		<div class="mainbackground" style="background-image: url({%static 'img/mathwh.png'%});">	</div>
+
+		<div class="maincontent">
+			<div class="row">
+				<div class="col-sm-3">
+					<div id="mainMenu" data-overview="Overview">
+						<nav class="animated clearfix mp-menu mp-overlap" style>
+							<div class="animated mp-level" data-level="1" style="display: block">
+								<a href="{% url 'subject:show_subject_list_view' %}" class="btn btn-primary">All subjects</a>
+								{% if subject_list %}
+									<ul>
+										{% for subject in subject_list %}
+                      <li><a href="{% url 'subject:show_subject_details' subject.subject_code %}"
+                             class="btn btn-primary">{{ subject.title }}</a></li>
+										{% endfor %}
+
+									</ul>
+								{% endif %}
+							</div>
+						</nav>
+					</div>
+				</div>
+
+
+					<img src="{%static 'img/image1.png'%}" class="col-sm-4">
+
+          <div class="col-sm-4">
+            <a href="{% url 'subject:show_streams_list_view' %}" class="btn btn-primary mb-1">All streams</a>
+
+            <ul id="stream-list">
+
+            </ul>
+          </div>
+				</div>
+			</div>
+    <script src="{% static 'js/jquery-3.2.1.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script>
+      displayStreamList()
+    </script>
+<footer>
+	<div class="footerbox">
+		<br><p class="managed">Project managed by Furkat Karaev</p>
+		<p class="copyright">©Online Math 2018</p>
+	</div>
+</footer>
+</body>
+</html>

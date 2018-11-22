@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Subject List</title>
+  	{% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  </head>
+  <body>
+
+    <div class="header">
+      <h1 class="logo">
+        <a href="{% url 'home' %}">Online Math</a>
+      </h1>
+      <div class="menu">
+        <a class="btn btn-link" href="/admin/">Admin</a>
+        <a class="btn btn-link" href="{% url 'users:profile' %}">Account</a>
+        <a class="btn btn-link" href="/exercise/">Exercises</a>
+        <a class="btn  btn-link" href="{% url 'users:sign_in' %}">Log in</a>
+        <a class="btn  btn-link" href="/user/sign_up/">Sign up</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        {%  if not user.is_authenticated %}
+          <div class="col-sm ">
+            <div class="card">
+              <a href="{% url 'users:sign_up' %}">Sign Up</a>
+              <a href="{% url 'users:sign_in' %}">Sign In</a><br>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="col-sm">
+          <div class="card">
+            {% if subject_list %}
+              <ul class="subjectname">
+                {% for subject in subject_list %}
+                  <li><a href="{% url 'subject:show_subject_details' subject.subject_code %}" class="btn btn-success">{{ subject.title }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

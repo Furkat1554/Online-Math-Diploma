@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Subject List</title>
+  	{% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
+  	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  </head>
+  <body>
+
+    <div class="header">
+      <h1 class="logo">
+        <a href="{% url 'home' %}">Online Math</a>
+      </h1>
+      <div class="menu">
+        <a class="btn btn-link" href="/admin/">Admin</a>
+        <a class="btn btn-link" href="{% url 'users:profile' %}">Account</a>
+        <a class="btn btn-link" href="/exercise/">Exercises</a>
+        <a class="btn  btn-link" href="{% url 'users:sign_in' %}">Log in</a>
+        <a class="btn  btn-link" href="/user/sign_up/">Sign up</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        {%  if not user.is_authenticated %}
+          <div class="col-sm ">
+            <div class="card">
+              <a href="{% url 'users:sign_up' %}">Sign Up</a><br>
+              <a href="{% url 'users:sign_in' %}">Sign In</a><br>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="col-sm">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-ceneter">
+                <div class="">
+                  <form class="" action="" method="post">
+                    {% csrf_token %}
+                    <div class="" id="expression-space"></div>
+                    <button class="btn btn-secondary ml-2" type="button" name="addField" id="add-field">Add Field</button>
+                    <div class="" id="answer-list"></div>
+                    <button type="button" class="btn btn-info ml-2" name="button" id="check-answer">Check</button>
+                  </form>
+                </div>
+                <div class="d-flex align-self-center" style="flex:3;">
+                  <h1 class="result-space" id="result-space"></h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+
+    <script type="text/javascript">
+      var topicId = getUrlPart(2);
+      var getExerciseUrl = `{% url 'calculus1:get_generate_exercise' topic.id %}`;
+      var sendAnswersUrl = `{% url 'calculus1:check_solution' %}`;
+      var expression = ajaxGet(getExerciseUrl);
+      function addAnswerField(){
+        $("#answer-list").append(
+          `<div class="d-flex m-2" style="width:10em">
+            <input class="answers form-control m-1" type="text" id="answer-${$(".answers").length}"/>
+            <button class="rm-answer btn btn-outline-danger mt-1 mb-1" type="button" name="addField" id="remove-answer-1">-</button>
+          </div>`);
+      }
+
+      function sendAnswers(){
+        var answers = [];
+        answerFields = document.getElementsByClassName("answers");
+        for(var i = 0;i < answerFields.length;i++){
+          if(answerFields[i].value == "") return;
+          answers.push(answerFields[i].value)
+        }
+        data = {
+          "expression": expression.expression,
+          "answers": answers,
+          "topicId": topicId
+        }
+        console.log(JSON.stringify(data,null,2));
+        return ajaxPost(sendAnswersUrl,data);
+      }
+
+      $("#expression-space").html(`<h1>${expression['expression']}</h1>`);
+      $("#add-field").on("click",function(){
+        addAnswerField();
+      });
+      $(".rm-answer").on("click",function() {
+        console.log(this);
+        console.log("this");
+      });
+      $("#remove-answer-1").on("click",function() {
+        console.log(this);
+        console.log("this");
+      });
+      $("#check-answer").on("click",function(){
+        result = sendAnswers();
+        if(result == null ||  !result['result'] ){
+          $("#result-space").text("FALSE");
+        }else
+        if(result['result']) {
+          $("#result-space").text("TRUE");
+        }
+
+      });
+      addAnswerField();
+    </script>
+  </body>
+</html>

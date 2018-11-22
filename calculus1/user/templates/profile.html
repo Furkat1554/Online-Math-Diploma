@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Profile</title>
+  	{% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
+  </head>
+  <body>
+    <div class="container">
+<div class="row">
+      {%  if not user.is_authenticated %}
+      <div class="col-sm ">
+        <div class="card">
+          <a href="{% url 'users:sign_up' %}">Sign Up</a><br>
+          <a href="{% url 'users:sign_in' %}">Sign In</a><br>
+
+        </div>
+      </div>
+      {% endif %}
+      <div class="col-sm">
+        <div class="card">
+
+          {%  if user.is_authenticated %}
+            <p>Welcome {{ user.username }} !!!</p>
+
+            <a href="{% url 'users:logout_view' %}">Log out</a>
+          {% endif %}
+        </div>
+      </div>
+      </div>
+
+    </div>
+  </body>
+</html>

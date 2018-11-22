@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Profile</title>
+  	{% load staticfiles %}
+    <link rel="icon" href="{% static 'img/favicon.png'%}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap4.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  </head>
+  <body>
+    <div class="header">
+      <h1 class="logo">
+        <a href="{% url 'home' %}">Online Math</a>
+      </h1>
+      <div class="logpage">
+        <a class="btn btn-info" href="{% url 'users:sign_in' %}">Log in</a>
+        <a class="btn btn-info" href="/user/sign_up/">Sign up</a>
+      </div>
+      <div class="menu">
+        <a  class="btn btn-info" href="/admin/">Admin</a>
+        <a  class="btn btn-info" href="{% url 'users:profile' %}">Account</a>
+        <a  class="btn btn-info" href="/exercise/">Exercises</a>
+      </div>
+    </div>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 ">
+          <div class="card">
+          </div>
+        </div>
+        <div class="col-sm">
+          {% if student %}
+            <div class="card">
+              <div class="card-head">
+                <h3 class="userinfo"><img src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-4/512/Male-user-info-icon.png"> {{ student.first_name }}'s information</h3>
+              </div>
+              <div class="card-body">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>First name</td>
+                        <td>{{ student.first_name }}</td>
+                      </tr>
+                      <tr>
+                        <td>Last name</td>
+                        <td>{{student.last_name}}</td>
+                      </tr>
+                      <tr>
+                        <td>Group</td>
+                        <td>{{student.profile.student_group}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+              </div>
+            </div>
+
+            {% if enrolled_subject_list %}
+            <div class="card">
+              <div class="card-head">
+                <h3 class="userinfo">{{ student.first_name }} enrolled subjects</h3>
+              </div>
+              <div class="card-body">
+                <table class="table table-bordered ">
+                  <tbody>
+                    {% for subject in enrolled_subject_list %}
+                      <tr>
+                        <td><a class="btn btn-link" href="{% url 'subject:show_subject_details' subject.id %}">{{ subject.title }}</a></td>
+                        <td><a class="btn btn-link" href="#">unenroll</a></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            {% endif %}
+
+            {% if not enrolled_subject_list %}
+                <h3>Hasn't been enrolled</h3>
+            {% endif %}
+
+          {% endif %}
+
+
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

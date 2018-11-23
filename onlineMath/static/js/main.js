@@ -93,19 +93,29 @@ function displayStreamList() {
   $("#stream-list").html(out);
 }
 
-function refreshExercise() {
-  var subjectCode = getPrimaryCode();
-  var topicCode = getSecondaryCode();
+function refreshExercise(subjectCode = null, topicCode = null) {
+  if (subjectCode == null) {
+    subjectCode = getPrimaryCode();
+  }
+  if (topicCode == null) {
+    topicCode = getSecondaryCode();
+  }
 
   var response = ajaxGet(getTopicExpressionUrl(subjectCode, topicCode));
-  console.log(response);
   $("#expression-to-solve").html(response.expression);
 }
 
-function sendExpressionAnswer() {
+function sendExpressionAnswer(assignment = null) {
+  console.log(`checkAnswer: ${JSON.stringify(assignment,null,2)}`);
+  var subjectCode, topicCode;
+  if (null == assignment) {
+    subjectCode = getPrimaryCode();
+    topicCode = getSecondaryCode();
+  } else {
+    subjectCode = assignment["subjectCode"];
+    topicCode = assignment["topicCode"];
+  }
   var expression = $("#expression-to-solve").html();
-  var subjectCode = getPrimaryCode();
-  var topicCode = getSecondaryCode();
   var userAnswer = $("#answer").val();
   var data = {
     expression: expression,
@@ -114,6 +124,12 @@ function sendExpressionAnswer() {
     userAnswer: userAnswer
   };
   var response = postAjax("/" + subjectCode + "/solve-expression", data);
+  console.log(response);
+  if (assignment != null &&
+    response['isTrueAnswer'] == true) {
+    var s =postAjax(`/subject/register-true-answer/${getPrimaryCode()}/${assignment["assignmentTopicId"]}`,{})
+    console.log(s);
+  }
   showAnswer(response['isTrueAnswer']);
 }
 
@@ -128,9 +144,9 @@ function hideAnswer() {
   $("#response").text('');
 }
 
-function requestNewExercise() {
+function requestNewExercise(subjectCode = null, topicCode = null) {
   hideAnswer();
-  refreshExercise();
+  refreshExercise(subjectCode, topicCode);
 }
 
 function isEmptyVar(variable) {

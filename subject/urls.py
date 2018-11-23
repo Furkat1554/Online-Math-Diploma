@@ -49,4 +49,15 @@ urlpatterns = [
         views.get_assignments,
         name='api_get_all_assignments'),
 
+    url(r'^show-assignment/([\d])$',
+        views.show_assignment,
+        name='show_assignment'),
+
+    url(r'^get-assignment-details/([\d])$',
+        views.get_assignment,
+        name='api_get_assignment'),
+
+    url(r'^register-true-answer/([\w|\W|\d|\D]+)/([\w|\W|\d|\D]+)$',
+        views.register_true_answer,
+        name='register_true_answer')
 ]

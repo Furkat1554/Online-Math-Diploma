@@ -87,3 +87,8 @@ class AssignmentDone(models.Model):
                                 blank=False)
     count = models.IntegerField(default=0)
     is_done = models.BooleanField(default=False)
+
+    def __str__(self):
+        if self.assignment_id.is_exam:
+            return "[exam]" + self.assignment_id.title + " - " + self.assignment_topic_id.topic_id.title + ' -> ' + self.user_id.username
+        return self.assignment_id.title + " - " + self.assignment_topic_id.topic_id.title + ' -> ' + self.user_id.username + ": " + str(self.assignment_id.is_exam)

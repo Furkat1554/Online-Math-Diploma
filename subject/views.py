@@ -70,6 +70,15 @@ def show_subject_details(req, subject_id):
     return render(req, 'subject-details.html', context)
 
 
+def show_assignment(req, assignment_id):
+    return render(req, "solve-exercise.html")
+
+
+def get_assignment(req, assignment_id):
+    assignment_topic = AssignmentTopic.objects.get(pk=assignment_id)
+    return JsonResponse(assignment_topic_to_dict(assignment_topic))
+
+
 @csrf_exempt
 def enroll_user(req):
     if 'GET' == req.method:
@@ -307,11 +316,7 @@ def get_assignment_details(user, assignment):
         for ass_tp in assignment_topics:
             result['examplesCount'] += int(ass_tp.example_amount)
             if ass_tp is not None:
-                assignment_dict = {'assignmentId': ass_tp.id,
-                                   'exampleAmount': ass_tp.example_amount,
-                                   'points': ass_tp.points,
-                                   'subjectCode': ass_tp.assignment_id.stream_id.subject_id.subject_code,
-                                   'topicCode': ass_tp.topic_id.function_code}
+                assignment_dict = assignment_topic_to_dict(ass_tp)
                 result['assignments'].append(assignment_dict)
 
     assignment_done = AssignmentDone.objects.filter(assignment_id=assignment, user_id=user)
@@ -320,12 +325,51 @@ def get_assignment_details(user, assignment):
         for done in assignment_done:
             if done is not None:
                 assignment_done_dict = {'assignmentId': done.assignment_id.id,
+                                        'assignmentTopicId': done.assignment_topic_id.id,
                                         'assignmentTopicCode': done.assignment_topic_id.topic_id.function_code,
                                         'exampleAmount': done.count,
                                         'isDone': done.is_done}
                 result['assignmentsDone'].append(assignment_done_dict)
             result['solvedCount'] += int(done.count)
     return result
+
+
+def assignment_topic_to_dict(at):
+    if at is None:
+        return {'assignmentId': "",
+                'exampleAmount': "",
+                'points': "",
+                'subjectCode': "",
+                'topicCode': ""
+                }
+    return {'assignmentTopicId': at.id,
+            'exampleAmount': at.example_amount,
+            'points': at.points,
+            'subjectCode': at.assignment_id.stream_id.subject_id.subject_code,
+            'topicCode': at.topic_id.function_code}
+
+
+@csrf_exempt
+def register_true_answer(req, assignment_id, assignment_topic_id):
+    try:
+        assignment_done = AssignmentDone.objects.get(user_id=req.user,
+                                                     assignment_id__pk=assignment_id,
+                                                     assignment_topic_id__pk=assignment_topic_id)
+    except AssignmentDone.DoesNotExist:
+        assignment_done = None
+
+    if assignment_done is None:
+        assignment_done = AssignmentDone.objects.create(assignment_id=Assignment.objects.get(pk=assignment_id),
+                                                        assignment_topic_id=AssignmentTopic.objects.get(
+                                                            pk=assignment_topic_id),
+                                                        user_id=req.user)
+
+    assignment_done.count += assignment_done.count + 1
+    if assignment_done.assignment_topic_id.example_amount == assignment_done.count:
+        assignment_done.is_done = True
+
+    assignment_done.save()
+    return JsonResponse("{'result':'success'}")
 
 
 def make_boolean(val):

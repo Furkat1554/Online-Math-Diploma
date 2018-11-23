@@ -60,11 +60,21 @@
   </div>
 
 </div>
+
 <script src="{% static 'js/jquery-3.2.1.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 <script src="{% static 'js/streams.js' %}"></script>
 <script>
+  var assignment = getAssignmentDetails();
+  console.log(assignment);
+  refreshExercise(assignment['subjectCode'],assignment['topicCode']);
+  $("#refresh-exercise-btn").click(function () {
+    requestNewExercise(assignment['subjectCode'],assignment['topicCode']);
+  });
 
+  $("#check-answer").click(function (){
+    sendExpressionAnswer(assignment)
+  });
 </script>
 </body>
 </html>

@@ -110,8 +110,7 @@ function getStreamExamDetails(streamCode, userId = 0) {
   return exam;
 }
 
-
-function dislpayStreamAssignmentDetails(ass,isExam=false) {
+function dislpayStreamAssignmentDetails(ass, isExam = false) {
   if (null == ass) {
     ass = getStreamAssignmentsDetails();
   }
@@ -126,40 +125,52 @@ function dislpayStreamAssignmentDetails(ass,isExam=false) {
       return;
     }
     ass.assignments.forEach(it => {
-      var assignmentDone = getAssignmentDoneById(ass.assignmentsDone, it.assignmentId);
-      // console.log(assignmentDone.exampleAmount);
-      out += `<li id="${it.id}">${it.topicCode}: `;
+      var assignmentDone = getAssignmentDoneById(ass.assignmentsDone, it.assignmentTopicId);
+      out += `<a href="/subject/show-assignment/${it.assignmentTopicId}"><li id="${it.id}">${it.topicCode}: `;
       if (assignmentDone == null) {
         out += `(0/${it.exampleAmount}) `;
       } else if (assignmentDone != null) {
-        out += `(${assignmentDone.exampleAmount}/${it.exampleAmount})`;
-        if (assignmentDone.isDone || assignmentDone.exampleAmount === it.exampleAmount) {
+        if (assignmentDone.isDone || assignmentDone.exampleAmount >= it.exampleAmount) {
+          out += `(${it.exampleAmount}/${it.exampleAmount})`;
           out += ` [OK]`;
+        } else {
+          out += `(${assignmentDone.exampleAmount}/${it.exampleAmount})`;
         }
       }
 
-      out += `</li>`
+      out += `</li></a>`
     });
     out += `</ul>`
 
   });
-  if(!isExam){
+  if (!isExam) {
     $("#assignments").html($("#assignments").html() + out);
     $("#assignments-title").removeAttr("hidden");
   } else {
-      $("#exams").html($("#exams").html() + out);
-      $("#exams-title").removeAttr("hidden");
+    $("#exams").html($("#exams").html() + out);
+    $("#exams-title").removeAttr("hidden");
   }
 }
 
-function getAssignmentDoneById(list, id) {
+function getAssignmentDoneById(list, topicId) {{
   if (list == null || list.length == 0) {
     return null;
   }
   for (var obj of list) {
-    if (obj.assignmentId == id) {
+    if (obj.assignmentTopicId === topicId)
       return obj;
     }
   }
   return null;
 }
+
+function getAssignmentDetails(streamId) {
+  if (isNaN(streamId)) {
+    streamId = getPrimaryCode();
+  }
+  var result = ajaxGet(`/subject/get-assignment-details/${streamId}`);
+  return result;
+}
+
+// /subject/show-assignment/{assignmentTopicId}/ => show assignment  page
+// /subject/get-assignment/{assignmentTopicId}/
